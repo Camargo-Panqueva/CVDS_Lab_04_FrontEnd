@@ -1,17 +1,34 @@
 import { API_URL } from '../globals.js'
 
+/**
+ * CreationBar is a custom HTML element that provides a form for creating tasks.
+ * It uses the Shadow DOM to encapsulate its styles and structure.
+ * 
+ * @class
+ * @extends {HTMLElement}
+ */
 class CreationBar extends HTMLElement {
     constructor() {
         super();
         this.shadowDOM = this.attachShadow({mode: 'open'});
     }
-
+    
+    /**
+     * Lifecycle method called when the custom element is appended to the DOM.
+     * Initializes the component by mapping attributes, rendering the component,
+     * and performing any additional setup required.
+     */
     connectedCallback() {
         this.mapComponentAttributes();
         this.render();
         this.initComponent();
     }
 
+    /**
+     * Maps component attributes to ensure they have default values.
+     * Iterates over a predefined list of attribute keys and checks if each key exists in the `attributes` object.
+     * If an attribute key does not exist, it initializes it with an empty string value.
+     */
     mapComponentAttributes() {
         const attributesMapping = [];
         attributesMapping.forEach(key => {
@@ -21,6 +38,10 @@ class CreationBar extends HTMLElement {
         });
     }
 
+    /**
+     * Renders the component by setting the inner HTML of the shadow DOM.
+     * It combines the CSS template and the main template.
+     */
     render() {
         this.shadowDOM.innerHTML = `
             ${this.templateCss()}
@@ -28,6 +49,11 @@ class CreationBar extends HTMLElement {
         `;
     }
 
+    /**
+     * Generates the HTML template for a button component.
+     * 
+     * @returns {string} The HTML string for the button component.
+     */
     template() {
         return `
             <div class="create-task-bar-wrapper">
@@ -39,7 +65,12 @@ class CreationBar extends HTMLElement {
             </div>
         `;
     }
- 
+
+    /**
+     * Generates a template string containing CSS styles for the button component.
+     * 
+     * @returns {string} A template string containing the CSS styles.
+     */
     templateCss() {
         return `
             <style>
@@ -122,6 +153,10 @@ class CreationBar extends HTMLElement {
         `;
     }
 
+    /**
+     * Initializes the component by selecting the task list element from the shadow DOM
+     * and fetching the tasks to be displayed.
+     */
     initComponent() {
         this.$tag = this.shadowDOM.querySelector('.appButton');
 
@@ -178,20 +213,37 @@ class CreationBar extends HTMLElement {
         })
     }
 
+    /**
+     * Called when the element is disconnected from the document's DOM.
+     * This method removes the element from the DOM.
+     */
     disconnectedCallback() {
         this.remove()
     }
 
+    /**
+     * Dispatches a custom event 'signal:task-added' with the provided task as the event detail.
+     *
+     * @param {Object} task - The task object to be included in the event detail.
+     */
     dispatchAddTaskEvent(task) {
         document.dispatchEvent(new CustomEvent('signal:task-added', {
             detail: task
         }));
     }
 
+    /**
+     * Dispatches a custom event 'signal:loading-state' to indicate a loading state.
+     */
     dispatchLoadingStateEvent() {
         document.dispatchEvent(new CustomEvent('signal:loading-state'));
     }
 
+    /**
+     * Dispatches a custom event 'signal:loaded-state' to notify that the state has been loaded.
+     * This event can be listened to by other parts of the application to perform actions
+     * once the state is fully loaded.
+     */
     dispatchLoadedStateEvent() {
         document.dispatchEvent(new CustomEvent('signal:loaded-state'));
     }

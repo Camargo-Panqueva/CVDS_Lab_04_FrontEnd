@@ -42,7 +42,7 @@ class TaskList extends HTMLElement {
         return `
             <ul class="task-list">
                 ${this.tasks.map(task => {
-                    return `<task-item name="${task.name}" description="${task.description}"></task-item>`
+                    return `<task-item name="${task.name}" description="${task.description}" done="${task.done}"></task-item>`
                 }).join('')}
             </ul>
         `;

@@ -49,7 +49,7 @@ class Task extends HTMLElement {
                     --min-task-height: 3.75rem;
 
                     display: grid;
-                    background-color: var(--content-2);
+                    background-color: var(--content-1);
                     border: 2px solid var(--content-4);
 
                     align-items: center;

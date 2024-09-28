@@ -12,7 +12,7 @@ class Task extends HTMLElement {
 
     mapComponentAttributes() {
         const attributesMapping = [
-            'title',
+            'name',
             'description',
         ];
         attributesMapping.forEach(key => {
@@ -32,7 +32,7 @@ class Task extends HTMLElement {
     template() {
         return `
             <li class="task">
-                <h2 class="task-title">${this.attributes.title.value}</h2>
+                <h2 class="task-name">${this.attributes.name.value}</h2>
                 <p class="task-description">${this.attributes.description.value}</p>
             </li>
         `;
@@ -62,8 +62,8 @@ class Task extends HTMLElement {
                     list-style: none;
                 }
 
-                .task-title {
-                    font-size: 1.15rem;
+                .task-name {
+                    font-size: 1.2rem;
                     font-weight: bold;
                     line-height: 0.5rem;
                     height: 0.5rem;

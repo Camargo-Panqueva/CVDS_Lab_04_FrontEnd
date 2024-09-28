@@ -1,7 +1,19 @@
+import { API_URL } from '../globals.js'
+
 class TaskList extends HTMLElement {
     constructor() {
         super();
-        this.shadowDOM = this.attachShadow({mode: 'open'});
+        this.shadowDOM = this.attachShadow({ mode: 'open' });
+        this.tasks = [];
+
+        document.addEventListener('signal:task-fetched', () => {
+            this.render();
+        })
+
+        document.addEventListener('signal:task-added', (event) => {
+            this.tasks.push(event.detail);
+            this.render();
+        })
     }
 
     connectedCallback() {
@@ -29,7 +41,9 @@ class TaskList extends HTMLElement {
     template() {
         return `
             <ul class="task-list">
-                <task-item title="Task 1" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."></task-item>
+                ${this.tasks.map(task => {
+                    return `<task-item name="${task.name}" description="${task.description}"></task-item>`
+                }).join('')}
             </ul>
         `;
     }
@@ -54,6 +68,27 @@ class TaskList extends HTMLElement {
 
     initComponent() {
         this.$tag = this.shadowDOM.querySelector('.task-list');
+        this.fetchTasks();
+    }
+
+    async fetchTasks() {
+        const ENDPOINT = `${API_URL}/tasks`;
+
+        // const response = await fetch(ENDPOINT);
+        // const data = await response.json();
+
+        this.tasks = [
+            {
+                name: 'Task 1',
+                description: 'Description 1'
+            },
+            {
+                name: 'Task 2',
+                description: 'Description 2'
+            }
+        ]
+
+        document.dispatchEvent(new CustomEvent('signal:task-fetched'));
     }
 
     disconnectedCallback() {

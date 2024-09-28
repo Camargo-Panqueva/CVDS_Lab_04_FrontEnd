@@ -30,10 +30,10 @@ class CreationBar extends HTMLElement {
 
     template() {
         return `
-            <div class="create-todo-bar-wrapper">
-                <form id="create-todo-bar" class="create-todo-bar">
-                    <input type="text" class="create-todo-input" placeholder="Create a new todo">
-                    <button class="create-todo-button">Create</button>
+            <div class="create-task-bar-wrapper">
+                <form id="create-task-bar" class="create-task-bar">
+                    <input type="text" class="create-task-input" placeholder="Create a new task">
+                    <button class="create-task-button">Create</button>
                 </form>
             </div>
         `;
@@ -46,14 +46,14 @@ class CreationBar extends HTMLElement {
                     box-sizing: border-box;
                 }
 
-                .create-todo-bar-wrapper {
+                .create-task-bar-wrapper {
                     display: flex;
 
                     width: 100%;
                     height: 100%;
                 }
 
-                .create-todo-bar {
+                .create-task-bar {
                     display: grid;
                     grid-template-columns: 1fr auto;
 
@@ -66,7 +66,7 @@ class CreationBar extends HTMLElement {
                     overflow: hidden;
                 }
 
-                .create-todo-input {
+                .create-task-input {
                     font-size: 1rem;
                     border: none;
                     padding: 0 1rem;
@@ -76,7 +76,7 @@ class CreationBar extends HTMLElement {
                     outline: none;
                 }
 
-                .create-todo-button {
+                .create-task-button {
                     font-size: 1rem;
                     border: none;
                     cursor: pointer;
@@ -96,13 +96,13 @@ class CreationBar extends HTMLElement {
     initComponent() {
         this.$tag = this.shadowDOM.querySelector('.appButton');
 
-        this.shadowDOM.querySelector('#create-todo-bar').addEventListener('submit', async (event) => { 
+        this.shadowDOM.querySelector('#create-task-bar').addEventListener('submit', async (event) => { 
             event.preventDefault();
 
-            const element = this.shadowDOM.querySelector('.create-todo-input');
-            const todo = element.value.trim();
+            const element = this.shadowDOM.querySelector('.create-task-input');
+            const task = element.value.trim();
 
-            if (!todo) {
+            if (!task) {
                 return;
             }
             
@@ -113,17 +113,22 @@ class CreationBar extends HTMLElement {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({todo})
+                body: JSON.stringify({task})
             });
 
             if (response.status !== 201) {
-                alert('Failed to create todo');
+                alert('Failed to create task');
                 return;
             }
 
             element.value = '';
 
-            this.dispatchEvent(new CustomEvent('create-todo', {detail: todo}));
+            document.dispatchEvent(new CustomEvent('signal:task-created'), {
+                detail: {
+                    name: task,
+                    description: ''
+                }
+            });
         })
     }
 

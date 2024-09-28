@@ -36,12 +36,22 @@ class TaskList extends HTMLElement {
         })
     }
 
+    /**
+     * Lifecycle method called when the custom element is appended to the DOM.
+     * Initializes the component by mapping attributes, rendering the component,
+     * and performing any additional setup required.
+     */
     connectedCallback() {
         this.mapComponentAttributes();
         this.render();
         this.initComponent();
     }
 
+    /**
+     * Maps component attributes to ensure they have default values.
+     * Iterates over a predefined list of attribute keys and checks if each key exists in the `attributes` object.
+     * If an attribute key does not exist, it initializes it with an empty string value.
+     */
     mapComponentAttributes() {
         const attributesMapping = [];
         attributesMapping.forEach(key => {
@@ -51,6 +61,10 @@ class TaskList extends HTMLElement {
         });
     }
 
+    /**
+     * Renders the component by setting the inner HTML of the shadow DOM.
+     * It combines the CSS template and the main template.
+     */
     render() {
         this.shadowDOM.innerHTML = `
             ${this.templateCss()}
@@ -58,6 +72,11 @@ class TaskList extends HTMLElement {
         `;
     }
 
+    /**
+     * Generates the HTML template for a button component.
+     * 
+     * @returns {string} The HTML string for the button component.
+     */
     template() {
         if (this.isLoading) {
             return `
@@ -74,7 +93,12 @@ class TaskList extends HTMLElement {
             </ul>
         `;
     }
- 
+
+    /**
+     * Generates a template string containing CSS styles for the button component.
+     * 
+     * @returns {string} A template string containing the CSS styles.
+     */
     templateCss() {
         return `
             <style>
@@ -103,11 +127,23 @@ class TaskList extends HTMLElement {
         `;
     }
 
+    /**
+     * Initializes the component by selecting the task list element from the shadow DOM
+     * and fetching the tasks to be displayed.
+     */
     initComponent() {
         this.$tag = this.shadowDOM.querySelector('.task-list');
         this.fetchTasks();
     }
 
+    /**
+     * Fetches tasks from the API and updates the tasks property.
+     * Dispatches a 'signal:task-fetched' event upon successful fetch.
+     * 
+     * @async
+     * @function fetchTasks
+     * @returns {Promise<void>} A promise that resolves when the tasks are fetched and the event is dispatched.
+     */
     async fetchTasks() {
         const ENDPOINT = `${API_URL}/tasks`;
 
@@ -119,6 +155,10 @@ class TaskList extends HTMLElement {
         document.dispatchEvent(new CustomEvent('signal:task-fetched'));
     }
 
+    /**
+     * Called when the element is disconnected from the document's DOM.
+     * This method removes the element from the DOM.
+     */
     disconnectedCallback() {
         this.remove()
     }

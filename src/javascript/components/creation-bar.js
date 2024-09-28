@@ -51,8 +51,6 @@ class CreationBar extends HTMLElement {
 
                     width: 100%;
                     height: 100%;
-
-                    padding: 2rem;
                 }
 
                 .create-todo-bar {
@@ -124,7 +122,7 @@ class CreationBar extends HTMLElement {
             }
 
             element.value = '';
-            
+
             this.dispatchEvent(new CustomEvent('create-todo', {detail: todo}));
         })
     }

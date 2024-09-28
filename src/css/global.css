@@ -10,12 +10,27 @@
 
     --primary: #007bff;
     --primary-foreground: #fff;
+
+    --secondary: #6c757d;
+    --secondary-foreground: #fff;
+
+    --success: #28a745;
+    --success-foreground: #fff;
+
+    --danger: #e94555;
+    --danger-foreground: #fff;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    overflow: hidden;
 }
 
 .app {
@@ -29,17 +44,25 @@
     min-height: 100vh;
 
     background-color: var(--background-color);
+
+    overflow: hidden;
 }
 
 .main-wrapper {
     display: grid;
     grid-template-rows: max-content 1fr;
 
+    gap: 2rem;
+
     width: 100%;
     max-width: 62rem;
     height: 100%;
-    max-height: 48rem;
+    max-height: 54rem;
     border-radius: 1rem;
     border: 2px solid var(--content-3);
     box-shadow: 0 0 1rem var(--content-3);
+
+    padding: 2rem;
+
+    overflow-y: auto;
 }

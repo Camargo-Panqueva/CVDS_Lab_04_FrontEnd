@@ -1,3 +1,5 @@
+import { API_URL } from '../globals.js'
+
 class Task extends HTMLElement {
     constructor() {
         super();
@@ -14,7 +16,8 @@ class Task extends HTMLElement {
         const attributesMapping = [
             'name',
             'description',
-            'done'
+            'done',
+            'task-id'
         ];
         attributesMapping.forEach(key => {
             if (!this.attributes[key]) {
@@ -31,12 +34,14 @@ class Task extends HTMLElement {
     }
 
     template() {
+        const name = this.attributes.name.value;
+        const description = this.attributes.description.value;
         const done = this.attributes.done.value === 'true';
 
         return `
             <li class="task">
-                <h2 class="task-name">${this.attributes.name.value}</h2>
-                <p class="task-description">${this.attributes.description.value}</p>
+                <h2 class="task-name">${name}</h2>
+                <p class="task-description">${description}</p>
                 <app-button class="toggle-done-button" color="${done ? 'secondary' : 'primary'}">${done ? 'Undone' : 'Done'}</app-button>
                 <app-button class="delete-button" color="danger">Delete</app-button>
             </li>
@@ -107,10 +112,58 @@ class Task extends HTMLElement {
 
     initComponent() {
         this.$tag = this.shadowDOM.querySelector('.task-list');
+
+        this.shadowDOM.querySelector('.toggle-done-button').addEventListener('click', () => {
+            this.toggleDone();
+        });
+
+        this.shadowDOM.querySelector('.delete-button').addEventListener('click', () => {
+            this.deleteTask();
+        });
     }
 
     disconnectedCallback() {
         this.remove()
+    }
+
+    async deleteTask() {
+        const taskId = this.attributes['task-id'].value;
+
+        // const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+        //     method: 'DELETE'
+        // });
+
+        // if (!response.ok) {
+        //     alert('Error deleting task');
+        //     return;
+        // }
+
+        document.dispatchEvent(new CustomEvent('signal:task-deleted', {
+            detail: taskId
+        }));
+    }
+
+    async toggleDone() {
+        const taskId = this.attributes['task-id'].value;
+
+        // const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+        //     method: 'PATCH',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         done: this.attributes.done.value === 'true' ? false : true
+        //     })
+        // });
+
+        // if (!response.ok) {
+        //     alert('Error updating task');
+        //     return;
+        // }
+
+        document.dispatchEvent(new CustomEvent('signal:task-toggle-done', {
+            detail: taskId
+        }));
     }
 }
 

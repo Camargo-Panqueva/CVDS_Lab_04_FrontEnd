@@ -16,6 +16,24 @@ class TaskList extends HTMLElement {
             this.tasks.push(event.detail);
             this.render();
         })
+
+        document.addEventListener('signal:task-deleted', (event) => {            
+            const taskId = event.detail;
+            this.tasks = this.tasks.filter(task => task.id !== taskId);            
+            this.render();
+        })
+
+        document.addEventListener('signal:task-toggle-done', (event) => {
+            const taskId = event.detail;
+            this.tasks = this.tasks.map(task => {
+                if (task.id === taskId) {
+                    task.done = !task.done;
+                }
+                
+                return task;
+            });
+            this.render();
+        })
     }
 
     connectedCallback() {
@@ -51,7 +69,7 @@ class TaskList extends HTMLElement {
         return `
             <ul class="task-list">
                 ${this.tasks.map(task => {
-                    return `<task-item name="${task.name}" description="${task.description}" done="${task.done}"></task-item>`
+                    return `<task-item task-id="${task.id}" name="${task.name}" description="${task.description}" done="${task.done}"></task-item>`
                 }).join('')}
             </ul>
         `;
@@ -93,18 +111,21 @@ class TaskList extends HTMLElement {
     async fetchTasks() {
         const ENDPOINT = `${API_URL}/tasks`;
 
-        const response = await fetch(ENDPOINT);
-        const data = await response.json();
+        // const response = await fetch(ENDPOINT);
+        // const data = await response.json();
 
         this.tasks = [
             {
+                id: "1",
                 name: 'Task 1',
                 description: 'Description 1',
                 done: true
             },
             {
+                id: "2",
                 name: 'Task 2',
-                description: 'Description 2'
+                description: 'Description 2',
+                done: false
             }
         ]
 

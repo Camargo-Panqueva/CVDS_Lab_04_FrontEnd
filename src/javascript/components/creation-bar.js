@@ -148,18 +148,18 @@ class CreationBar extends HTMLElement {
 
             this.dispatchLoadingStateEvent();
 
-            const response = await fetch(ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name: taskName, description: taskDescription, done: false })
-            });
+            // const response = await fetch(ENDPOINT, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({ name: taskName, description: taskDescription, done: false })
+            // });
 
-            if (response.status !== 201) {
-                alert('Failed to create task');
-                return;
-            }
+            // if (response.status !== 201) {
+            //     alert('Failed to create task');
+            //     return;
+            // }
 
             this.dispatchLoadedStateEvent();
 

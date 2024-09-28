@@ -111,23 +111,10 @@ class TaskList extends HTMLElement {
     async fetchTasks() {
         const ENDPOINT = `${API_URL}/tasks`;
 
-        // const response = await fetch(ENDPOINT);
-        // const data = await response.json();
+        const response = await fetch(ENDPOINT);
+        const data = await response.json();
 
-        this.tasks = [
-            {
-                id: "1",
-                name: 'Task 1',
-                description: 'Description 1',
-                done: true
-            },
-            {
-                id: "2",
-                name: 'Task 2',
-                description: 'Description 2',
-                done: false
-            }
-        ]
+        this.tasks = data
 
         document.dispatchEvent(new CustomEvent('signal:task-fetched'));
     }

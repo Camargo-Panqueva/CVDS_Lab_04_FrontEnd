@@ -129,14 +129,14 @@ class Task extends HTMLElement {
     async deleteTask() {
         const taskId = this.attributes['task-id'].value;
 
-        // const response = await fetch(`${API_URL}/tasks/${taskId}`, {
-        //     method: 'DELETE'
-        // });
+        const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+            method: 'DELETE'
+        });
 
-        // if (!response.ok) {
-        //     alert('Error deleting task');
-        //     return;
-        // }
+        if (!response.ok) {
+            alert('Error deleting task');
+            return;
+        }
 
         document.dispatchEvent(new CustomEvent('signal:task-deleted', {
             detail: taskId
@@ -146,20 +146,20 @@ class Task extends HTMLElement {
     async toggleDone() {
         const taskId = this.attributes['task-id'].value;
 
-        // const response = await fetch(`${API_URL}/tasks/${taskId}`, {
-        //     method: 'PATCH',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         done: this.attributes.done.value === 'true' ? false : true
-        //     })
-        // });
+        const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                done: this.attributes.done.value === 'true' ? false : true
+            })
+        });
 
-        // if (!response.ok) {
-        //     alert('Error updating task');
-        //     return;
-        // }
+        if (!response.ok) {
+            alert('Error updating task');
+            return;
+        }
 
         document.dispatchEvent(new CustomEvent('signal:task-toggle-done', {
             detail: taskId

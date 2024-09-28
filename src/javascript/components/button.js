@@ -30,7 +30,7 @@ class AppButton extends HTMLElement {
 
     template() {
         return `
-            <button class="appButton">
+            <button class="app-button">
                 ${this.attributes.content.value}
             </button>
         `;
@@ -39,7 +39,7 @@ class AppButton extends HTMLElement {
     templateCss() {
         return `
             <style>
-                .appButton {
+                .app-button {
                     font-size: 1rem;
                     border: none;
                     outline: none;
@@ -50,7 +50,7 @@ class AppButton extends HTMLElement {
                     transition: background-color 0.25s;
                 }
                 
-                .appButton:hover {
+                .app-button:hover {
                     background-color: #666;
                 }
             </style>
@@ -58,7 +58,7 @@ class AppButton extends HTMLElement {
     }
 
     initComponent() {
-        this.$tag = this.shadowDOM.querySelector('.appButton');
+        this.$tag = this.shadowDOM.querySelector('.app-button');
     }
 
     disconnectedCallback() {

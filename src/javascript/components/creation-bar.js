@@ -1,3 +1,5 @@
+import { API_URL } from '../globals.js'
+
 class CreationBar extends HTMLElement {
     constructor() {
         super();
@@ -29,7 +31,7 @@ class CreationBar extends HTMLElement {
     template() {
         return `
             <div class="create-todo-bar-wrapper">
-                <form class="create-todo-bar">
+                <form id="create-todo-bar" class="create-todo-bar">
                     <input type="text" class="create-todo-input" placeholder="Create a new todo">
                     <button class="create-todo-button">Create</button>
                 </form>
@@ -95,6 +97,36 @@ class CreationBar extends HTMLElement {
 
     initComponent() {
         this.$tag = this.shadowDOM.querySelector('.appButton');
+
+        this.shadowDOM.querySelector('#create-todo-bar').addEventListener('submit', async (event) => { 
+            event.preventDefault();
+
+            const element = this.shadowDOM.querySelector('.create-todo-input');
+            const todo = element.value.trim();
+
+            if (!todo) {
+                return;
+            }
+            
+            const ENDPOINT = `${API_URL}/tasks`;
+
+            const response = await fetch(ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({todo})
+            });
+
+            if (response.status !== 201) {
+                alert('Failed to create todo');
+                return;
+            }
+
+            element.value = '';
+            
+            this.dispatchEvent(new CustomEvent('create-todo', {detail: todo}));
+        })
     }
 
     disconnectedCallback() {

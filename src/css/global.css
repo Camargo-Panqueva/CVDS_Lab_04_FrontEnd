@@ -10,6 +10,15 @@
 
     --primary: #007bff;
     --primary-foreground: #fff;
+
+    --secondary: #6c757d;
+    --secondary-foreground: #fff;
+
+    --success: #28a745;
+    --success-foreground: #fff;
+
+    --danger: #e94555;
+    --danger-foreground: #fff;
 }
 
 * {

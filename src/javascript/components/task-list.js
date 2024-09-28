@@ -5,8 +5,10 @@ class TaskList extends HTMLElement {
         super();
         this.shadowDOM = this.attachShadow({ mode: 'open' });
         this.tasks = [];
+        this.isLoading = true;
 
         document.addEventListener('signal:task-fetched', () => {
+            this.isLoading = false;
             this.render();
         })
 
@@ -39,6 +41,13 @@ class TaskList extends HTMLElement {
     }
 
     template() {
+        if (this.isLoading) {
+            return `
+                <div class="loading-wrapper">
+                    <p>Loading tasks...</p>
+                </div>
+            `;
+        }
         return `
             <ul class="task-list">
                 ${this.tasks.map(task => {
@@ -51,6 +60,16 @@ class TaskList extends HTMLElement {
     templateCss() {
         return `
             <style>
+                .loading-wrapper {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 1.25rem;
+                    color: var(--primary);
+
+                    height: 100%;
+                }
+                
                 .task-list {
                     display: flex;
                     flex-direction: column;
@@ -74,13 +93,14 @@ class TaskList extends HTMLElement {
     async fetchTasks() {
         const ENDPOINT = `${API_URL}/tasks`;
 
-        // const response = await fetch(ENDPOINT);
-        // const data = await response.json();
+        const response = await fetch(ENDPOINT);
+        const data = await response.json();
 
         this.tasks = [
             {
                 name: 'Task 1',
-                description: 'Description 1'
+                description: 'Description 1',
+                done: true
             },
             {
                 name: 'Task 2',

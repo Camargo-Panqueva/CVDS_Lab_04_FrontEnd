@@ -12,7 +12,7 @@ class AppButton extends HTMLElement {
 
     mapComponentAttributes() {
         const attributesMapping = [
-            'content',
+            'color',
         ];
         attributesMapping.forEach(key => {
             if (!this.attributes[key]) {
@@ -31,27 +31,39 @@ class AppButton extends HTMLElement {
     template() {
         return `
             <button class="app-button">
-                ${this.attributes.content.value}
+                <slot></slot>
             </button>
         `;
     }
  
     templateCss() {
+        const color = this.getColor();
+        const foreground = this.getForeground();
+
         return `
             <style>
                 .app-button {
+                    --color: ${color};
+                    --foreground: ${foreground};
+
                     font-size: 1rem;
+                    font-weight: semibold;
                     border: none;
                     outline: none;
                     cursor: pointer;
-                    padding: 1rem 2rem;
-                    border-radius: 1rem;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 0.75rem;
 
-                    transition: background-color 0.25s;
+                    background-color: var(--color);
+                    color: var(--foreground);
+
+                    transition: opacity 0.25s;
+
+                    width: 100%;
                 }
                 
                 .app-button:hover {
-                    background-color: #666;
+                    opacity: 0.75;
                 }
             </style>
         `;
@@ -63,6 +75,32 @@ class AppButton extends HTMLElement {
 
     disconnectedCallback() {
         this.remove()
+    }
+
+    getColor() {
+        switch (this.attributes.color.value) {
+            case 'primary':
+                return 'var(--primary)';
+            case 'secondary':
+                return 'var(--secondary)';
+            case 'danger':
+                return 'var(--danger)';
+            default:
+                return 'var(--content-2)';
+        }
+    }
+
+    getForeground() {
+        switch (this.attributes.color.value) {
+            case 'primary':
+                return 'var(--primary-foreground)';
+            case 'secondary':
+                return 'var(--secondary-foreground)';
+            case 'danger':
+                return 'var(--danger-foreground)';
+            default:
+                return 'var(--content-1-foreground)';
+        }
     }
 }
 
